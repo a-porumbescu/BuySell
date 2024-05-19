@@ -1,9 +1,10 @@
 package com.example.buysell.repositories;
 
-import com.example.buysell.models.Image;
+import com.example.buysell.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ImageRepository extends JpaRepository<Image, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByEmail(String email);
 }

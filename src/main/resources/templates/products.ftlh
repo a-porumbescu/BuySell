@@ -4,7 +4,11 @@
     <title>BUYSELL</title>
 </head>
 <body>
-<h1>BUYSELL</h1><hr>
+<h1>BUYSELL | <a href="/login">Enter</a></h1><hr>
+<form action="/logout" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <input type="submit" value="Logout">
+</form>
 <h4>Товары со всего мира!</h4>
 <form action="/" method="get">
     Поиск по названию товара: <input type="text" name="title"><br>
@@ -12,7 +16,7 @@
 </form>
 <#list products as product>
     <div>
-        <p><b>${product.title}</b> ${product.price} руб. | <a href="/product/${product.id}">Подробнее...</a></p>
+        <p><b>${product.title}</b> ${product.price} MDL | <a href="/product/${product.id}">Подробнее...</a></p>
     </div>
 <#else>
     <h3>Товаров нет</h3>
