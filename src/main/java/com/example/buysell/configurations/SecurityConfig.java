@@ -8,17 +8,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
@@ -32,13 +32,13 @@ public class SecurityConfig {
         http
                 .authorizeRequests(auth -> {
                     logger.debug("Configuring authorized requests");
-                    auth.requestMatchers("/", "/home", "/login", "/product/**", "/images/**", "/registration").permitAll()
+                    auth.requestMatchers("/", "/product/**", "/images/**", "/registration", "/user/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .formLogin(form -> {
                     logger.debug("Configuring form login");
                     form.loginPage("/login")
-                            .defaultSuccessUrl("/hello")
+                            .defaultSuccessUrl("/")
                             .permitAll();
                 })
                 .logout(logout -> {
@@ -54,13 +54,6 @@ public class SecurityConfig {
         auth.userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder());
         return auth;
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler successHandler() {
-        SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
-        handler.setUseReferer(true);
-        return handler;
     }
 
     @Bean
